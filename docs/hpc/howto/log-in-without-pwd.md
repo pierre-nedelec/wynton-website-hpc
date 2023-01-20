@@ -165,7 +165,28 @@ With all of the above, you should now be able to log in to the cluster using:
 {local}$ ssh {{ site.login.hostname }}
 [alice@{{ site.login.name }} ~]$ 
 ```
+## Step 5: Seamlessly connect to dev and data transfer nodes
 
+To connect in one command to the development nodes or data transfer nodes, add the following to your `~/.ssh/config`:
+```lang-none
+Host *dev?
+  ProxyJump {{ site.login.hostname }}
+  User alice
+  IdentityFile ~/.ssh/laptop_to_{{ site.cluster.nickname | downcase }}
+Host *dt?
+  ProxyJump {{ site.login.hostname }}
+  User alice
+  IdentityFile ~/.ssh/laptop_to_{{ site.cluster.nickname | downcase }}
+```
+With all of the above, you should now be able to log in to the cluster using:
+
+```sh
+{local}$ ssh {{ site.dev.name }}
+[alice@{{ site.dev.name }} ~]$ 
+# or any of the following:
+{local}$ ssh (p)dt1
+{local}$ ssh (p)gpudev1
+```
 
 ## Appendix
 
